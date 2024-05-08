@@ -5,7 +5,7 @@ class ResPartnerInherit(models.Model):
     _inherit = "res.partner"
 
     level_studies = fields.Char(help="Nivel de estudios.", readonly=True)
-    variation_date = fields.Date(help="Fecha en la que se modifica algún valor necesario.", readonly=True)
+    variation_date = fields.Date(help="Fecha en la que se modifica algún valor necesario para avisar al INE.", readonly=True)
     create_date = fields.Date(help="Fecha de creacion del contacto.", readonly=True)
     provice_birth = fields.Char(help="Provincia de nacimiento.", readonly=True)
     destination_province = fields.Char(readonly=True)

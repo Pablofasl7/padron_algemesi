@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-        
-
+    <data>
+        <record id="padron_algemesi_form_view" model="ir.ui.view">
+            <field name="name">padron_algemesi_form_view</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='internal_notes']" position="after">
+                    <page string="Información personal">
+                        <group>
+                            <group>
+                                <field name="level_studies" string="Nivel de estudios"/>
+                                <field name="variation_date" string="Fecha de variación"/>
+                                <field name="create_date" string="Fecha de entrada"/>
+                                <field name="provice_birth" string="Provincia nacimiento"/>
+                            </group>
+                            <group>
+                                <field name="destination_province" string="Provincia destino"/>
+                                <field name="municipality_birth" string="Municipio nacimiento"/>
+                                <field name="destination_municipality" string="Municipio destino"/>
+                                <field name="country_nationality" string="Pais nacionalidad"/>
+                                <field name="variation_code" string="Código de variación"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
 </odoo>

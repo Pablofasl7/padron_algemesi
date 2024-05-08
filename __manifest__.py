@@ -11,6 +11,6 @@
     ],
     "data": [
         # "security/ir.model.access.csv",
-        # "views/padron_algemesi_view.xml",
+        "views/padron_algemesi_view.xml",
     ],
 }
