@@ -13,3 +13,5 @@ class ResPartnerInherit(models.Model):
     destination_municipality = fields.Char(readonly=True)
     country_nationality = fields.Char(help="Pais de nacionalidad.", readonly=True)
     variation_code = fields.Char(readonly=True)
+
+    nia = fields.Char(readonly=True)
