@@ -29,7 +29,10 @@
                     <field name="nia"/>
                     <button string='Probar' name='get_people' type='object'/>
                 </xpath>
+                <!-- <xpath expr="//form/sheet/group/group/field[@name='vat']" position="after">
+                    <field name="nia" string="Nia"/>
+                </xpath> -->
             </field>
-        </record>
+        </record>   
     </data>
 </odoo>
