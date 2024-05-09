@@ -29,8 +29,8 @@ class ResPartnerInherit(models.Model):
         session = Session()
         session.verify = VERIFY
         session.auth = HTTPBasicAuth(username, password)
-        client = Client("http://192.168.15.123:5580/karat/services/POBLACION/sh_poblacionws?wsdl",transport=Transport(session=session))
-        service = client.create_service("{http://client.ws.unit4.com}sh_poblacionwsSoap11Binding",ENDPOINT)
+        client = Client("http://192.168.15.123:5580/karat/services/POBLACION/sh_poblacionws?wsdl")
+        service = client.create_service("{http://192.168.15.123:5580/karat/services/POBLACION/sh_poblacionws}sh_poblacionwsSoap11Binding",ENDPOINT)
         
         response = service.certificadoHabitante(certificadoHabitanteRequest={
             "ramon":"ramon"
