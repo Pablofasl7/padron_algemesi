@@ -4,6 +4,8 @@ from zeep import Client
 from zeep.transports import Transport 
 from requests import Session
 from requests.auth import HTTPBasicAuth
+import xml.etree.ElementTree as ET
+from datetime import datetime
 
 class ResPartnerInherit(models.Model):
     _inherit = "res.partner"
@@ -22,19 +24,64 @@ class ResPartnerInherit(models.Model):
     
     def get_people(self):
         
-        ENDPOINT = "https://192.168.15.123/karat/services/POBLACION/sh_poblacionws.sh_poblacionwsHttpsSoap11Endpoint/"
-        VERIFY = False
+        ENDPOINT = "http://192.168.15.123:5580/karat/services/POBLACION/sh_poblacionws.sh_poblacionwsHttpSoap11Endpoint/"
         username = "srvpoblacion"
         password = "KS9bRhQ7"
+
         session = Session()
-        session.verify = VERIFY
-        session.auth = HTTPBasicAuth(username, password)
-        client = Client("http://192.168.15.123:5580/karat/services/POBLACION/sh_poblacionws?wsdl")
-        service = client.create_service("{http://192.168.15.123:5580/karat/services/POBLACION/sh_poblacionws}sh_poblacionwsSoap11Binding",ENDPOINT)
+        session.verify = False
+        session.auth = HTTPBasicAuth(username,password)
+        client = Client("http://192.168.15.123:5580/karat/services/POBLACION/sh_poblacionws?wsdl", transport=Transport(session=session))
+
+        service = client.create_service("{http://client.ws.unit4.com}sh_poblacionwsSoap11Binding", ENDPOINT)
         
-        response = service.certificadoHabitante(certificadoHabitanteRequest={
-            "ramon":"ramon"
-        })
-        print(response)
-        print(response)
-        print(response)
+        # Create XML parameters
+        parametros = ET.Element("parametros")
+        param1 = ET.SubElement(parametros, "parametro", id="CODIGOPROVINCIA")
+        param2 = ET.SubElement(parametros, "parametro", id="CODIGOMUNICIPIO")
+        param3 = ET.SubElement(parametros, "parametro", id="NIF")
+        param4 = ET.SubElement(parametros, "parametro", id="TIPODOCUMENTO")
+        param5 = ET.SubElement(parametros, "parametro", id="TIPOVOLANTE")
+        param6 = ET.SubElement(parametros, "parametro", id="IDIOMA")
+        param7 = ET.SubElement(parametros, "parametro", id="GENERARDOCUMENTO")
+
+        # Set parameter values
+        param1.text = "46"
+        param2.text = "29"
+        param3.text = "20863603G"
+        param4.text = "1"
+        param5.text = "0"
+        param6.text = "0"  # Assuming this parameter is optional and can be left empty
+        param7.text = "2"
+
+        # Convert XML tree to string
+        xml_str = ET.tostring(parametros, encoding="unicode", method="xml")
+
+        # Now you can send the XML string to the service
+        resp = service.existeHabitante(smlEntrada=xml_str)
+
+        print(resp)
+        self.procesar_xml(resp)
+
+    def procesar_xml(self, xml_data):
+        xml_tree = ET.fromstring(xml_data)
+
+        datos_persona = xml_tree.find('DatosPersona')
+        if datos_persona is not None:
+            nivel_estudios = datos_persona.find('ESTUDIOS').text
+            fecha_modificacion = datetime.strptime(datos_persona.find('FECHAVARIACION').text, '%d/%m/%Y').date()
+            provincia_nacimiento = datos_persona.find('DESCRIPCION_PROVINCIANACIMIENTO').text
+            municipio_nacimiento = datos_persona.find('DESCRIPCION_MUNICIPIONACIMIENTO').text
+            pais_nacionalidad = datos_persona.find('DESCRIPCION_NACIONALIDAD').text
+            codigo_variacion = datos_persona.find('CODIGOVARIACION').text
+            # nia = datos_persona.find('NIA').text  
+
+            self.write({
+                'level_studies': nivel_estudios,
+                'variation_date': fecha_modificacion,
+                'provice_birth': provincia_nacimiento,
+                'municipality_birth': municipio_nacimiento,
+                'country_nationality': pais_nacionalidad,
+                'variation_code': codigo_variacion,
+                #'nia': nia,
+            })    
