@@ -18,7 +18,7 @@ class ResPartnerInherit(models.Model):
     country_nationality = fields.Char(help="Pais de nacionalidad.", readonly=True)
     variation_code = fields.Char(readonly=True)
 
-    nia = fields.Char(readonly=True)
+    nia = fields.Char(string="NIA", help="Prueba", readonly=True)
     
     def get_people(self):
         
@@ -38,9 +38,3 @@ class ResPartnerInherit(models.Model):
         print(response)
         print(response)
         print(response)
-        
-        
-        
-        
-        
-        

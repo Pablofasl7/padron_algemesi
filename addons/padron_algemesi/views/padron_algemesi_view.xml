@@ -8,7 +8,6 @@
             <field name="arch" type="xml">
                 <xpath expr="//page[@name='internal_notes']" position="after">
                     <page string="Información personal">
-                        <separator string="Información personal"/>
                         <group>
                             <group>
                                 <field name="level_studies" string="Nivel de estudios"/>
@@ -27,12 +26,9 @@
                     </page>
                 </xpath>
                 <xpath expr="//field[@name='category_id']" position="after">
-                    <field name="nia" string="Nia" invisible="False"/>
+                    <field name="nia"/>
                     <button string='Probar' name='get_people' type='object'/>
                 </xpath>
-                <!-- <xpath expr="//form/sheet/group/group/field[@name='vat']" position="after">
-                    <field name="nia" string="Nia"/>
-                </xpath> -->
             </field>
         </record>
     </data>
